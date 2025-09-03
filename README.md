@@ -1,6 +1,6 @@
 # termtail
 
-A Go utility for processing terminal output with pattern matching that results in success/failure and control character handling.
+A Go utility for processing terminal output with pattern matching that results in success/failure exit codes depending on what was found.
 
 ## Overview
 
