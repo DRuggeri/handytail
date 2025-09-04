@@ -1,7 +1,7 @@
-# termtail Makefile
+# handytail Makefile
 
 # Variables
-BINARY_NAME=termtail
+BINARY_NAME=handytail
 BINARY_PATH=./$(BINARY_NAME)
 GO_FILES=$(shell find . -name "*.go" -type f)
 VERSION?=dev

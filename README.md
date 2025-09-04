@@ -1,36 +1,43 @@
-# termtail
+# handytail
 
-A Go utility for processing terminal output with pattern matching that results in success/failure exit codes depending on what was found.
+A Go utility for processing some input with pattern matching that results in success/failure exit codes, depending on what was found.
 
 ## Overview
 
-`termtail` reads input line by line from stdin, processes control characters (discarding nearly all but backspace characters, which manipulate the line), and exits with specific status codes when certain regex patterns are matched. This makes it useful for watching command output and determining success or failure conditions based on the contents rather than exit code or EOF.
+`handytail` reads input line by line, processes control characters (discarding nearly all but backspace characters, which manipulate the line), and exits with specific status codes when certain regex patterns are matched. This makes it useful for watching command output or reading a file and determining success or failure conditions based on the contents rather than exit code or EOF.
 
 ## Features
 
-- **Line-by-line processing** of stdin input, similar to grep
+- **Line-by-line processing** of stdin or file-based input, similar to grep
 - **Backspace handling**: Removes backspace characters and the preceding character
 - **Control character filtering**: Removes carriage returns and other control characters
 - **Multiple regex patterns**: Support for multiple success and failure patterns
-- **Flexible exit codes**: Exit 0 for success patterns, exit 1 for failure patterns
+- **Flexible exit codes**:
+  - 0 for success pattern matches
+  - 1 for failure pattern matches
+  - 2 for failures reading input
+  - 3 for EOF
 
 ## Installation
 
 ```bash
-go build -o termtail .
+go build -o handytail .
 ```
 
 ## Usage
 
 ```bash
-./termtail [options] < input
-command | ./termtail [options]
+./handytail [options] < input
+command | ./handytail [options]
+./handytail [options] /path/to/inputfile
 ```
 
 ### Command Line Options
 
 - `-success <pattern>`: Regex pattern that causes exit with status 0 (can be specified multiple times)
 - `-failure <pattern>`: Regex pattern that causes exit with status 1 (can be specified multiple times)
+- `-quiet`: Disables printing the processed lines to screen
+- `arg`: When provided, the program will read from this file instead of stdin
 
 
 ## Character Processing
@@ -73,7 +80,7 @@ Unicode characters are preserved and work correctly with backspace operations.
 
 ```bash
 # Monitor deployment script
-./deploy.sh 2>&1 | ./termtail \
+./deploy.sh 2>&1 | ./handytail \
   -success "Deployment.*successful" \
   -success "All services.*running" \
   -failure "Deployment.*failed" \
